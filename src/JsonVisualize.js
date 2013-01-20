@@ -4,9 +4,14 @@ JsonVisualize = function (obj) {
     }
     this.obj = obj;
     this.title = '';
+    this.depth = 0;
 };
 
 JsonVisualize.prototype = {
+    display: function () {
+        this.recur(this.obj);
+    },
+
     recur: function (element) {
         if (element.isArray()) {
             this.displayArray(element);
@@ -22,38 +27,37 @@ JsonVisualize.prototype = {
         }
     },
 
-    display: function () {
-        this.recur(this.obj);
-    }
-
     displayArray: function (element) {
-        //display [
+        this.create('[', 'structure');
         var originalTitle = this.title;
+        this.depth++;
         for (var x = 0; x < element.length; x++) {
-            //attach title
             this.title = originalTitle + '[' + x + ']';
+            this.create(element[x] + (x === element.length - 1) : '' : ',', 'content', this.title);
             this.recur(element[x]);
         }
+        this.depth--;
         this.title = originalTitle;
-        //display ]
+        this.create(']', 'structure');
     },
 
     displayItem: function (element) {
-        //attach title
-       //display element
+        this.create(element, this.title);
     },
 
     displayObject: function (element) {
         var originalTitle = this.title;
-        //display {
+        this.create('{', 'structure');
+        this.depth++;
         for (var item in element) {
             if (element.hasOwnProperty(item)) {
                 this.title = originalTitle + '.' + item;
-                //display "item":
+                this.create('"' + item + '":', 'name');
                 this.recur(element);
             }
         }
-        //display }
+        this.depth--;
+        this.create('}', 'structure');
         this.title = originalTitle;
     }
 };
