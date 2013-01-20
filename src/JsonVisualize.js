@@ -61,11 +61,11 @@ JsonVisualize.prototype = {
         this.title = originalTitle;
     },
 
-    create: function (content, class, title) {
+    create: function (content, className, title) {
         var displayText = document.createTextNode(content);
         var displayNode = document.createElement('div');
         displayNode.appendChild(displayText);
-        displayNode.className = class;
+        displayNode.className = className;
 
         if (typeof title !== 'undefined') {
             displayNode.setAttribute('title', title);
