@@ -33,7 +33,7 @@ JsonVisualize.prototype = {
         this.depth++;
         for (var x = 0; x < element.length; x++) {
             this.title = originalTitle + '[' + x + ']';
-            this.create(element[x] + (x === element.length - 1) : '' : ',', 'content', this.title);
+            this.create(element[x] + (x === element.length - 1) ? '' : ',', 'content', this.title);
             this.recur(element[x]);
         }
         this.depth--;
@@ -59,5 +59,16 @@ JsonVisualize.prototype = {
         this.depth--;
         this.create('}', 'structure');
         this.title = originalTitle;
+    },
+
+    create: function (content, class, title) {
+        var displayText = document.createTextNode(content);
+        var displayNode = document.createElement('div');
+        displayNode.appendChild(displayText);
+        displayNode.className = class;
+
+        if (typeof title !== 'undefined') {
+            displayNode.setAttribute('title', title);
+        }
     }
 };
