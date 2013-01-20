@@ -42,7 +42,7 @@ JsonVisualize.prototype = {
     },
 
     displayItem: function (element) {
-        this.create(element, this.title);
+        this.create(element, 'content', this.title);
     },
 
     displayObject: function (element) {
@@ -70,5 +70,12 @@ JsonVisualize.prototype = {
         if (typeof title !== 'undefined') {
             displayNode.setAttribute('title', title);
         }
+    },
+
+    isArray: function (obj) {
+        if (Array.isArray) {
+            return Array.isArray(obj);
+        }
+        return toString.call(obj) === '[object Array]';
     }
 };
