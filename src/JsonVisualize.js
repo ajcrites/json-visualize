@@ -1,10 +1,11 @@
-JsonVisualize = function (obj) {
+JsonVisualize = function (obj, container) {
     if (typeof obj === 'string') {
         obj = JSON.parse(obj);
     }
     this.obj = obj;
-    this.title = '';
+    this.title = 'objectVariableName';
     this.depth = 0;
+    this.container = container;
 };
 
 JsonVisualize.prototype = {
@@ -13,7 +14,7 @@ JsonVisualize.prototype = {
     },
 
     recur: function (element) {
-        if (element.isArray()) {
+        if (this.isArray(element)) {
             this.displayArray(element);
         }
         else if (element === null) {
@@ -53,7 +54,7 @@ JsonVisualize.prototype = {
             if (element.hasOwnProperty(item)) {
                 this.title = originalTitle + '.' + item;
                 this.create('"' + item + '":', 'name');
-                this.recur(element);
+                this.recur(element[item]);
             }
         }
         this.depth--;
@@ -70,6 +71,7 @@ JsonVisualize.prototype = {
         if (typeof title !== 'undefined') {
             displayNode.setAttribute('title', title);
         }
+        this.container.appendChild(displayNode);
     },
 
     isArray: function (obj) {
