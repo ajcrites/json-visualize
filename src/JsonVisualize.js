@@ -6,6 +6,7 @@ JsonVisualize = function (obj, container) {
     this.title = 'objectVariableName';
     this.depth = 0;
     this.container = container;
+    this.elementClass = 'object-content';
 };
 
 JsonVisualize.prototype = {
@@ -30,12 +31,17 @@ JsonVisualize.prototype = {
 
     displayArray: function (element) {
         this.create('[', 'structure');
+        this.br();
         var originalTitle = this.title;
         this.depth++;
+        this.elementClass = 'array-content';
         for (var x = 0; x < element.length; x++) {
             this.title = originalTitle + '[' + x + ']';
-            this.create(element[x] + (x === element.length - 1) ? '' : ',', 'content', this.title);
             this.recur(element[x]);
+            if (x !== element.length - 1) {
+                this.create(',', 'comma');
+            }
+            this.br();
         }
         this.depth--;
         this.title = originalTitle;
@@ -43,19 +49,23 @@ JsonVisualize.prototype = {
     },
 
     displayItem: function (element) {
-        this.create(element, 'content', this.title);
+        this.create(element, this.elementClass, this.title);
     },
 
     displayObject: function (element) {
         var originalTitle = this.title;
         this.create('{', 'structure');
+        this.br();
         this.depth++;
+        this.elementClass = 'object-content';
         for (var item in element) {
             if (element.hasOwnProperty(item)) {
                 this.title = originalTitle + '.' + item;
                 this.create('"' + item + '":', 'name');
                 this.recur(element[item]);
             }
+            this.create(',', 'comma');
+            this.br();
         }
         this.depth--;
         this.create('}', 'structure');
@@ -71,7 +81,12 @@ JsonVisualize.prototype = {
         if (typeof title !== 'undefined') {
             displayNode.setAttribute('title', title);
         }
+        if (className === 'name' || className === 'structure' || className === 'array-content') {
+            displayNode.style.paddingLeft = (this.depth * 20) + 'px';
+        }
         this.container.appendChild(displayNode);
+
+        return displayNode;
     },
 
     isArray: function (obj) {
@@ -79,5 +94,9 @@ JsonVisualize.prototype = {
             return Array.isArray(obj);
         }
         return toString.call(obj) === '[object Array]';
+    },
+
+    br: function () {
+        this.container.appendChild(document.createElement('br'));
     }
 };

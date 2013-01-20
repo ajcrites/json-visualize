@@ -10,7 +10,8 @@
                { "id": "1001", "type": "Regular" },
                { "id": "1002", "type": "Chocolate" },
                { "id": "1003", "type": "Blueberry" },
-               { "id": "1004", "type": "Devil's Food" }
+               { "id": "1004", "type": "Devil's Food" },
+               ["sub array", {"sub object": "element" }]
             ]
       },
    "topping":
@@ -22,5 +23,6 @@
          { "id": "5006", "type": "Chocolate with Sprinkles" },
          { "id": "5003", "type": "Chocolate" },
          { "id": "5004", "type": "Maple" }
-      ]
+      ],
+    "anArray":[0,1,2]
 }
