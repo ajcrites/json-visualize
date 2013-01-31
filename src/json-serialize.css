@@ -5,7 +5,7 @@
 .name {
     color: green;
     display: inline-block;
-    margin-right: 15px;
+    margin-right: .5em;
 }
 .object-content, .array-content {
     color: blue;

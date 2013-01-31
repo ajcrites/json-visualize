@@ -7,6 +7,7 @@ JsonVisualize = function (obj, container) {
     this.depth = 0;
     this.container = container;
     this.elementClass = 'object-content';
+    this.startLoop = false;
 };
 
 JsonVisualize.prototype = {
@@ -35,6 +36,7 @@ JsonVisualize.prototype = {
         var originalTitle = this.title;
         this.depth++;
         this.elementClass = 'array-content';
+        this.startLoop = false;
         for (var x = 0; x < element.length; x++) {
             this.title = originalTitle + '[' + x + ']';
             this.recur(element[x]);
@@ -61,11 +63,13 @@ JsonVisualize.prototype = {
         for (var item in element) {
             if (element.hasOwnProperty(item)) {
                 this.title = originalTitle + '.' + item;
+                this.startLoop = true;
                 this.create('"' + item + '":', 'name');
                 this.recur(element[item]);
             }
             this.create(',', 'comma');
             this.br();
+            this.startLoop = false;
         }
         this.depth--;
         this.create('}', 'structure');
@@ -81,7 +85,7 @@ JsonVisualize.prototype = {
         if (typeof title !== 'undefined') {
             displayNode.setAttribute('title', title);
         }
-        if (className === 'name' || className === 'structure' || className === 'array-content') {
+        if (className === 'name' || (className === 'structure' && !this.startLoop) || className === 'array-content') {
             displayNode.style.paddingLeft = (this.depth * 20) + 'px';
         }
         this.container.appendChild(displayNode);
