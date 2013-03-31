@@ -62,7 +62,14 @@ JsonVisualize.prototype = {
         this.elementClass = 'object-content';
         for (var item in element) {
             if (element.hasOwnProperty(item)) {
-                this.title = originalTitle + '.' + item;
+                //This is much more restrictive than an actual valid variable name,
+                //but the bracket syntax works regardless
+                if (!/^[a-z$_][a-z$_0-9]*$/i.test(item)) {
+                    this.title = originalTitle + '["' + item.replace('"', '\\"') + '"]';
+                }
+                else {
+                    this.title = originalTitle + '.' + item;
+                }
                 this.startLoop = true;
                 this.create('"' + item + '":', 'name');
                 this.recur(element[item]);
